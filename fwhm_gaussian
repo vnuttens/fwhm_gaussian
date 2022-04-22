@@ -1,0 +1,34 @@
+import os
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.interpolate import UnivariateSpline
+#--------------------------------------------------------------------------
+
+# IN TE VULLEN
+
+a = -15.32070
+b = 1694.74814
+c = 8.63148
+d = 3.29015
+
+XL = 17.3826 # geef hier de laatste x-waarde in bij "List"
+#--------------------------------------------------------------------------
+
+x = np.linspace(0,XL)
+blue = a + (b-a)*np.exp(-(x-c)*(x-c)/(2*d*d))
+
+spline = UnivariateSpline(x, blue-np.max(blue)/2, s=0)
+r1, r2 = spline.roots()
+#--------------------------------------------------------------------------
+# Making plot
+
+fig1, ax1  = plt.subplots(1, 1, sharex=True,sharey=True)
+
+ax1.plot(x, blue,label='')
+
+ax1.axvspan(r1, r2, facecolor='g', alpha=0.3)
+FWHM = r2-r1
+ax1.set_ylabel('Pixel value')
+ax1.set_xlabel('x [mm]')
+ax1.set_title(f'FWHM= {"{:0.2f}".format(FWHM)}')
+
